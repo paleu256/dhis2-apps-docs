@@ -2,10 +2,13 @@
 ==
 
 # Basic _everyday_ workflow overview
+The above is however more steps than we as app developers generally have to deal with, a more simplified everyday workflow overview would look more like 
 
-+ Write code
-+ Run your build step that places the _artefact_ in a `build` folder (Webpack, gulp, scripts, etc) 
-+ Run `mvn deploy`
+1. Write code
+2. Run the build step 
+3. Run `mvn deploy`
+
+> The build step is a step in the process that places the _artefact_ in a folder named `build` in the root directory of the project. The contents of this folder go into the jar file that is published to Sonatype. (Webpack, gulp, scripts, etc)
 
 #Initial setup
 
@@ -45,10 +48,29 @@ git push -u origin master
 
 ## Building application
 
-## Deployment to maven
+## Deployment to Sonatype
+After creating the `pom.xml` and creating a build step for your app deploying to Sonatype is just a simple step.
+
+```bash
+mvn deploy
+```
+> This is assuming you configured your maven as defined in the Maven/Sonatype setup.
 
 ## Registering with DHIS2
 
 ### Registering the app as a dependency
+To let DHIS2 know which applications to install when building the `dhis-web-apps` module we need to register our application as a dependency. We do this by specifying the name of our application on sonatype and the output directory of where to place the application.
+
+The following xml represents the settings app.  
+```xml
+<artifactItem>
+    <groupId>org.hisp.dhis</groupId>
+    <artifactId>dhis-app-settings</artifactId>
+    <version>${apps.version}</version>
+    <overWrite>true</overWrite>
+    <outputDirectory>${project.build.directory}/${project.artifactId}/dhis-web-settings</outputDirectory>
+    <includes>**/*.*</includes>
+</artifactItem>
+```
 
 ### Registering the app as a module
