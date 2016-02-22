@@ -6,7 +6,6 @@ The steps that we as app developers generally have to deal with to publish an ap
 3. Run `mvn deploy`
 
 > The build step is a step in the process that places the _artefact_ in a folder named `build` in the root directory of the project. The contents of this folder get packed up into the jar file that is published to Sonatype. This build step can be anything you want (Webpack, gulp, scripts, etc) as long as it results into a `./build` folder with your files and the `manifest.webapp`.
-> NOTE: When deploying the applications to Sonatype, they do not get _installed_ like other DHIS2 applications, therefore the server does not update the `manifest.webapp` file with the correct base url. We will therefore set the `activities.dhis.href` property in the manifest to `..` instead of `*`.
 
 ## Source control
 The source code for the applications is kept in github repositories. Lets first create a repository for our application and put our code on github.
@@ -44,7 +43,7 @@ git push -u origin master
 ## Creating the pom.xml
 To be able to register our app with Sonatype we have to create a `pom.xml` that describes our application. This `pom.xml` file will be used to register our app on Sonatype so we can use Maven to include it in the DHIS2 build process.
 
-We can use the `settings-app` as a basis to create our own `pom.xml` (You will find it [here](https://github.com/dhis2/settings-app/blob/c5206b81afc4f80207fb6ded71f6922fcc1b5191/pom.xml)
+We can use the `settings-app` as a basis to create our own `pom.xml` (You will find it [here](https://github.com/dhis2/settings-app/blob/c5206b81afc4f80207fb6ded71f6922fcc1b5191/pom.xml))
 
 The following lines are the important ones to adjust to your own application:
 
@@ -61,21 +60,24 @@ If you are using npm to build your application and have create a `build` script 
 ```bash
 npm run build
 ```
+> If you are not using npm/webpack to build your project you can replace this with a simple script that copies your files or a `gulp` task.
 
 ## Deployment to Sonatype
+> When deploying the applications to Sonatype, they do not get _installed_ like other DHIS2 applications, therefore the server does not update the `manifest.webapp` file with the correct base url. We will therefore set the `activities.dhis.href` property in the manifest to `..` instead of `*`.
+
 After creating the `pom.xml` and creating a build step for your app deploying to Sonatype is just a simple step.
 
 ```bash
 mvn deploy
 ```
-> This is assuming you configured your maven as defined in the Maven/Sonatype setup.
+> This is assuming you configured your maven as defined in the [Maven/Sonatype setup](https://github.com/dhis2/dhis2-apps-docs/blob/master/maven_sonatype_setup.md).
 
 The app is now deployed to the Maven repository and ready to be _installed_ into DHIS2.
 
 ## Registering with DHIS2
 
 ### Registering the app as a dependency
-To let DHIS2 know which applications to install when building the `dhis-web-apps` module we need to register our application as a dependency. We do this by specifying the name of our application on sonatype and the output directory of where to place the application.
+To let DHIS2 know which applications to install when building the `dhis-web-apps` module we need to register our application as a dependency. We do this by specifying the name of our application on SonaType and the output directory of where to place the application.
 
 The following xml represents the settings app.  
 ```xml
@@ -89,4 +91,23 @@ The following xml represents the settings app.
 </artifactItem>
 ```
 
+We need to add this piece of xml to the `pom.xml` file of of the `dhis-web-apps` module on Launchpad. 
+
+> Note that the artifact idea is prefixed `dhis-app-` while the _outputDirectory_ is prefixed with `dhis-web-`
+
 ### Registering the app as a module
+
+After registering the app as a dependency we need to make it known to Struts as a module. In the same `dhis-web-apps` project, we go to
+[struts.xml](http://bazaar.launchpad.net/~dhis2-devs-core/dhis2/trunk/view/head:/dhis-2/dhis-web/dhis-web-apps/src/main/resources/struts.xml#L67) that is located in `src/main/resources` to register our app with the follow piece of XML.
+
+> Note that the `dhis-web-<app-name> corresponds with the _outputDirectory_ as defined in the previous step. The same goes for the _namespace_ property.
+
+> If your app starts at a different location than `index.html` in the root of the application, you also need to change the `action.name` property in the snippet below.
+
+```xml
+<package name="dhis-web-settings" extends="dhis-web-commons" namespace="/dhis-web-settings">
+    <action name="index" class="org.hisp.dhis.commons.action.NoAction">
+        <result name="success" type="redirect">#</result>
+    </action>
+</package>
+```
