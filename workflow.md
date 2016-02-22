@@ -5,7 +5,8 @@ The steps that we as app developers generally have to deal with to publish an ap
 2. Run the build step 
 3. Run `mvn deploy`
 
-> The build step is a step in the process that places the _artefact_ in a folder named `build` in the root directory of the project. The contents of this folder go into the jar file that is published to Sonatype. (Webpack, gulp, scripts, etc)
+> The build step is a step in the process that places the _artefact_ in a folder named `build` in the root directory of the project. The contents of this folder get packed up into the jar file that is published to Sonatype. This build step can be anything you want (Webpack, gulp, scripts, etc) as long as it results into a `./build` folder with your files and the `manifest.webapp`.
+> NOTE: When deploying the applications to Sonatype, they do not get _installed_ like other DHIS2 applications, therefore the server does not update the `manifest.webapp` file with the correct base url. We will therefore set the `activities.dhis.href` property in the manifest to `..` instead of `*`.
 
 ## Source control
 The source code for the applications is kept in github repositories. Lets first create a repository for our application and put our code on github.
@@ -43,15 +44,16 @@ git push -u origin master
 ## Creating the pom.xml
 To be able to register our app with Sonatype we have to create a `pom.xml` that describes our application. This `pom.xml` file will be used to register our app on Sonatype so we can use Maven to include it in the DHIS2 build process.
 
-We can use the `settings-app` as a basis to create our own `pom.xml` (You will find it [here](github.com/dhis2/settings-app/blob/c5206b81afc4f80207fb6ded71f6922fcc1b5191/pom.xml)
+We can use the `settings-app` as a basis to create our own `pom.xml` (You will find it [here](https://github.com/dhis2/settings-app/blob/c5206b81afc4f80207fb6ded71f6922fcc1b5191/pom.xml)
 
 The following lines are the important ones to adjust to your own application:
-8 
-11
-12 
-22-25
-36-40
-44
+
++ 8 - Change `artifactId` to fit the correct name `dhis-app-<your-app-name>`
++ 11 - Change `name` to reflect your apps name 
++ 12 - Change the description of the app to match your own app
++ 22-25 - Here you can change the developer details. (Add more `<developer>` blocks if you have multiple.
++ 36-40 - Change these source control urls to match the corresponding github repository
++ 44 - Here you can put the link you your github repository or the launchpad bug page.
 
 ## Building application
 
