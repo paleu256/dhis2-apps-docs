@@ -1,5 +1,7 @@
 # Maven/Sonatype setup
 
+This setup is a one time setup to configure your machine to publish packages to the DHIS2 Sonatype repository. If you have already done this once, you can continue from the [workflow](https://github.com/dhis2/dhis2-apps-docs/blob/master/workflow.md).
+
 ## Install gnupg
 To sign the certificate for the jar file we use `gnupg`. If you do not have this available yet you can install it using the following commands.
 
@@ -41,3 +43,5 @@ This file should have the following contents and the correct username/password f
   </servers>
 </settings>
 ```
+
+This setup should be sufficient for us to start publishing apps to the Maven/Sonatype repository. You should now be able to follow the [workflow](https://github.com/dhis2/dhis2-apps-docs/blob/master/workflow.md) instructions to publish your applications.
