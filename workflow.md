@@ -48,6 +48,7 @@ We can use the `settings-app` as a basis to create our own `pom.xml` (You will f
 The following lines are the important ones to adjust to your own application:
 
 + 8 - Change `artifactId` to fit the correct name `dhis-app-<your-app-name>`
++ 9 - The `version` should correspond with the version of DHIS2 you wish to publish for. The version should always be a _snapshot_ repository (If you are publishing for 2.23 then your version should be 2.23-SNAPSHOT) that way the latest version of the app will always be downloaded.
 + 11 - Change `name` to reflect your apps name 
 + 12 - Change the description of the app to match your own app
 + 22-25 - Here you can change the developer details. (Add more `<developer>` blocks if you have multiple.
