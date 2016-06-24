@@ -43,5 +43,6 @@ This file should have the following contents and the correct username/password f
   </servers>
 </settings>
 ```
+To find the user name and password, Please look at the https://github.com/dhis2/dhis2-server-admin/blob/master/maven/settings.xml
 
 This setup should be sufficient for us to start publishing apps to the Maven/Sonatype repository. You should now be able to follow the [workflow](https://github.com/dhis2/dhis2-apps-docs/blob/master/workflow.md) instructions to publish your applications.
