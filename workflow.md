@@ -3,7 +3,7 @@ The steps that we as app developers generally have to deal with to publish an ap
 
 1. Write code
 2. Run the build step 
-3. Run `mvn deploy`
+3. Run `mvn clean deploy`
 
 > The build step is a step in the process that places the _artefact_ in a folder named `build` in the root directory of the project. The contents of this folder get packed up into the jar file that is published to Sonatype. This build step can be anything you want (Webpack, gulp, scripts, etc) as long as it results into a `./build` folder with your files and the `manifest.webapp`.
 
@@ -69,7 +69,7 @@ npm run build
 After creating the `pom.xml` and creating a build step for your app deploying to Sonatype is just a simple step.
 
 ```bash
-mvn deploy
+mvn clean deploy
 ```
 > This is assuming you configured your maven as defined in the [Maven/Sonatype setup](https://github.com/dhis2/dhis2-apps-docs/blob/master/maven_sonatype_setup.md).
 
