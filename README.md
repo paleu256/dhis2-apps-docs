@@ -19,5 +19,5 @@ The process for developing creating apps is a repeating process for each separat
 ## Daily workflow steps
 1. Write code/tests
 2. Run build step (`npm run build`)
-3. `mvn deploy`
+3. `mvn clean deploy`
 
